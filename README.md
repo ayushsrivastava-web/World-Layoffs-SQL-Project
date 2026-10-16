@@ -1,50 +1,63 @@
-# 📌 Project Overview
--This repository contains a comprehensive SQL project analyzing worldwide tech layoffs from 2020 to 2023. The project is divided into two major phases:
--Data Cleaning: Transforming raw, messy data into a structured and standardized format using MySQL.
--Exploratory Data Analysis (EDA): Extracting deep business insights, trends, patterns, and top company rankings using advanced SQL queries (CTEs, Window Functions, Aggregations).
+# World Layoffs Data Cleaning & Exploratory Data Analysis (SQL)
+
+## 📌 Project Overview
+This repository contains a comprehensive SQL project analyzing worldwide tech layoffs from 2020 to 2023. The project is divided into two major phases:
+1. **Data Cleaning:** Transforming raw, messy data into a structured and standardized format using MySQL.
+2. **Exploratory Data Analysis (EDA):** Extracting deep business insights, trends, patterns, and top company rankings using advanced SQL queries (CTEs, Window Functions, Aggregations).
+
+---
 
 ## 📊 Dataset Source
--Download Link: <https://github.com/AlexTheAnalyst/MySQL-YouTube-Series/blob/main/layoffs.csv>
+- **Dataset Origin:** Sourced from Alex The Analyst's SQL Portfolio Project repository.
+- **Data File:** `layoffs.csv`
+- **Link:** [Download Raw Dataset](https://github.com/AlexTheAnalyst/MySQL-YouTube-Series/blob/main/layoffs.csv)
 
-## 🧹 Part 1: Data Cleaning Workflow (01_data_cleaning.sql)
--The raw dataset was cleaned and structured through the following steps:
--Removing Duplicates:
--Created a staging table (layoff_staging) and utilized the ROW_NUMBER() window function partitioned across all columns to identify duplicate entries (row_num > 1).
--Filtered and deleted duplicate rows using a second clean staging table (layoff_staging2).
--Standardizing Data:
--Company Names: Trimmed extra white spaces using TRIM().
--Industry Names: Fixed spelling discrepancies and grouped variations (e.g., standardizing variants like Crypto* to crypto).
--Country Names: Cleaned trailing periods (e.g., standardizing 'United States.' to 'United States').
--Date Formats: Converted text-based dates to proper SQL DATE format using STR_TO_DATE() and ALTER TABLE.
--Handling Null and Blank Values:
--Converted empty string industries ('') to NULL to enable proper self-joins.
--Performed a SQL Self-Join (layoff_staging2 t1 JOIN layoff_staging2 t2) to populate missing industry values where another row for the same company had valid industry data.
--Removed rows where both total_laid_off and percentage_laid_off were NULL as they lacked critical analytical metrics.
+---
 
-## 📸 Data Cleaning Output Snapshot
--What to capture: Run SELECT * FROM layoff_staging2 LIMIT 10; to show the clean table output.
+## 🛠️ Repository File Structure
 
-## 🔍 Part 2: Exploratory Data Analysis (EDA) (02_exploratory_data_analysis.sql)
--After cleaning, advanced SQL queries were executed to explore trends and find key metrics:
--Maximum Impact: Found the maximum layoffs in a single day and max percentage laid off (100% shutdown companies).
--Company & Industry Aggregations: Grouped total layoffs by company and industry using SUM() and ordered them descending.
--Timeline & Seasonality: Analyzed layoffs year-by-year and month-by-month using SUBSTRING() string extraction.
--Rolling Total (Moving Sum): Calculated a cumulative sum of layoffs month over month using window functions.
--Company Rankings: Used DENSE_RANK() partitioned by years via CTEs to find the Top 5 layoff companies per year.
+```text
+world-layoffs-sql-project/
+├── data/
+│   ├── raw_data.csv                  
+│   └── cleaned_data.csv              
+├── sql_scripts/
+│   ├── 01_data_cleaning.sql          
+│   └── 02_exploratory_data_analysis.sql 
+├── screenshots/                      
+│   ├── cleaned_data_preview.png
+│   ├── top_companies_layoffs.png
+│   └── top_companies_by_year.png
+└── README.md
+```
 
-## 📊 Key Insights & Query Output Snapshots
+---
+
+🧹 Part 1: Data Cleaning Workflow (01_data_cleaning.sql)
+The raw dataset was cleaned and structured through the following steps:
+
+Removing Duplicates: Utilized ROW_NUMBER() partitioned across columns to identify duplicate entries (row_num > 1) and deleted them via staging tables.
+
+Standardizing Data: Used TRIM() for white spaces, standardized Crypto variations, and converted text dates to SQL DATE type via STR_TO_DATE().
+
+Handling Null/Blank Values: Converted blank spaces to NULL and used SQL Self-Joins to populate missing industry data.
+
+---
+
+📸 Data Cleaning Output Snapshot
+🔍 Part 2: Exploratory Data Analysis (EDA) (02_exploratory_data_analysis.sql)
+📊 Key Insights & Query Output Snapshots
 1. Top Companies by Total Layoffs
-SQL
 SELECT company, SUM(total_laid_off) AS total_layoffs
 FROM layoff_staging2
 GROUP BY company
 ORDER BY total_layoffs DESC
 LIMIT 5;
-📸 Screenshot to attach: screenshots/top_companies_layoffs.png
--Key Insight: Tech giants like Amazon, Google, and Meta recorded the highest aggregate layoffs during the peak contraction phase.
+Key Insight: Tech giants like Amazon, Google, and Meta recorded the highest aggregate layoffs during the peak contraction phase.
 
-## 2. Monthly Rolling Total of Layoffs
-SQL
+---
+
+2. Monthly Rolling Total of Layoffs:
 WITH Rolling_Total AS (
     SELECT SUBSTRING(`date`,1,7) AS `MONTH`, SUM(total_laid_off) AS total_off
     FROM layoff_staging2
@@ -55,11 +68,11 @@ WITH Rolling_Total AS (
 SELECT `MONTH`, total_off,
 SUM(total_off) OVER(ORDER BY `MONTH`) AS rolling_total
 FROM Rolling_Total;
-📸 Screenshot to attach: screenshots/rolling_total_layoffs.png
--Key Insight: The cumulative sum highlights aggressive spikes in layoffs heading into late 2022 and early 2023.
+Key Insight: The cumulative sum highlights aggressive spikes in layoffs heading into late 2022 and early 2023.
 
-## 3. Top 5 Layoff Companies Per Year (Using DENSE_RANK)
-SQL
+---
+
+3. Top 5 Layoff Companies Per Year (Using DENSE_RANK):
 WITH Company_Year (company, years, total_laid_off) AS (
     SELECT company, YEAR(`date`), SUM(total_laid_off)
     FROM layoff_staging2
@@ -74,11 +87,22 @@ Company_Year_Rank AS (
 SELECT *
 FROM Company_Year_Rank
 WHERE Ranking <= 5;
-📸 Screenshot to attach: screenshots/top_companies_by_year.png
--Key Insight: Allows a granular view of which specific companies dominated layoff sheets year-over-year.
+Key Insight: Allows a granular view of which specific companies dominated layoff sheets year-over-year.
+
+---
 
 ## 🚀 How to Run This Project
--Clone or download this repository.
--Open MySQL Workbench (or any SQL client).
--Run 01_data_cleaning.sql step-by-step to set up staging tables, clean duplicates, format columns, and handle nulls.
--Run 02_exploratory_data_analysis.sql to execute aggregations, window functions, and retrieve analytical insights.
+Clone or download this repository.
+
+Execute 01_data_cleaning.sql in MySQL Workbench.
+
+Execute 02_exploratory_data_analysis.sql for analytical insights.
+---
+
+### ⚠️ Note for Screenshots:
+Make sure aapki image files `screenshots` folder ke andar exact in names se uploaded hain:
+1. `cleaned_data_preview.png`
+2. `top_companies_layoffs.png`
+3. `top_companies_by_year.png`
+
+Yeh code paste karte hi saare code blocks, headings aur images bilkul perfectly render ho jayenge!
