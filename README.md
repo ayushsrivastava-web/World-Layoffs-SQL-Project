@@ -33,31 +33,33 @@ world-layoffs-sql-project/
 
 ---
 
-🧹 Part 1: Data Cleaning Workflow (01_data_cleaning.sql)
-The raw dataset was cleaned and structured through the following steps:
-
-Removing Duplicates: Utilized ROW_NUMBER() partitioned across columns to identify duplicate entries (row_num > 1) and deleted them via staging tables.
-
-Standardizing Data: Used TRIM() for white spaces, standardized Crypto variations, and converted text dates to SQL DATE type via STR_TO_DATE().
-
-Handling Null/Blank Values: Converted blank spaces to NULL and used SQL Self-Joins to populate missing industry data.
-
+## 🧹 Part 1: Data Cleaning Workflow (01_data_cleaning.sql)
+-The raw dataset was cleaned and structured through the following steps:
+- **Removing Duplicates:**  Utilized ROW_NUMBER() partitioned across columns to identify duplicate entries (row_num > 1) and deleted them via staging tables.
+- **Standardizing Data:**  Used TRIM() for white spaces, standardized Crypto variations, and converted text dates to SQL DATE type via STR_TO_DATE().
+- **Handling Null/Blank Values:** Converted blank spaces to NULL and used SQL Self-Joins to populate missing industry data.
+### 📸 Data Cleaning Output Snapshot
+[Cleaned Data Preview](screenshots/cleaned_data_preview.png)
 ---
 
-📸 Data Cleaning Output Snapshot
-🔍 Part 2: Exploratory Data Analysis (EDA) (02_exploratory_data_analysis.sql)
-📊 Key Insights & Query Output Snapshots
-1. Top Companies by Total Layoffs
+
+
+## 🔍 Part 2: Exploratory Data Analysis (EDA) (02_exploratory_data_analysis.sql)
+## 📊 Key Insights & Query Output Snapshots
+## 1. Top Companies by Total Layoffs
+```SQL
 SELECT company, SUM(total_laid_off) AS total_layoffs
 FROM layoff_staging2
 GROUP BY company
 ORDER BY total_layoffs DESC
 LIMIT 5;
+```
 Key Insight: Tech giants like Amazon, Google, and Meta recorded the highest aggregate layoffs during the peak contraction phase.
 
 ---
 
-2. Monthly Rolling Total of Layoffs:
+## 2. Monthly Rolling Total of Layoffs:
+```SQL
 WITH Rolling_Total AS (
     SELECT SUBSTRING(`date`,1,7) AS `MONTH`, SUM(total_laid_off) AS total_off
     FROM layoff_staging2
@@ -68,11 +70,13 @@ WITH Rolling_Total AS (
 SELECT `MONTH`, total_off,
 SUM(total_off) OVER(ORDER BY `MONTH`) AS rolling_total
 FROM Rolling_Total;
+```
 Key Insight: The cumulative sum highlights aggressive spikes in layoffs heading into late 2022 and early 2023.
 
 ---
 
-3. Top 5 Layoff Companies Per Year (Using DENSE_RANK):
+## 3. Top 5 Layoff Companies Per Year (Using DENSE_RANK):
+```SQL
 WITH Company_Year (company, years, total_laid_off) AS (
     SELECT company, YEAR(`date`), SUM(total_laid_off)
     FROM layoff_staging2
@@ -87,6 +91,7 @@ Company_Year_Rank AS (
 SELECT *
 FROM Company_Year_Rank
 WHERE Ranking <= 5;
+```
 Key Insight: Allows a granular view of which specific companies dominated layoff sheets year-over-year.
 
 ---
@@ -98,11 +103,3 @@ Execute 01_data_cleaning.sql in MySQL Workbench.
 
 Execute 02_exploratory_data_analysis.sql for analytical insights.
 ---
-
-### ⚠️ Note for Screenshots:
-Make sure aapki image files `screenshots` folder ke andar exact in names se uploaded hain:
-1. `cleaned_data_preview.png`
-2. `top_companies_layoffs.png`
-3. `top_companies_by_year.png`
-
-Yeh code paste karte hi saare code blocks, headings aur images bilkul perfectly render ho jayenge!
