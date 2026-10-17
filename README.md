@@ -42,8 +42,6 @@ world-layoffs-sql-project/
 [Cleaned Data Preview](screenshots/cleaned_data_preview.png)
 ---
 
-
-
 ## 🔍 Part 2: Exploratory Data Analysis (EDA) (02_exploratory_data_analysis.sql)
 ## 📊 Key Insights & Query Output Snapshots
 ## 1. Top Companies by Total Layoffs
@@ -54,7 +52,9 @@ GROUP BY company
 ORDER BY total_layoffs DESC
 LIMIT 5;
 ```
-Key Insight: Tech giants like Amazon, Google, and Meta recorded the highest aggregate layoffs during the peak contraction phase.
+### 📸 Query Output Snapshot
+[Top Companies by Total Layoffs Preview](screenshots/top_companies_layoffs.png)
+- **Key Insight:** Tech giants like Amazon, Google, and Meta recorded the highest aggregate layoffs during the peak contraction phase.
 
 ---
 
@@ -71,7 +71,9 @@ SELECT `MONTH`, total_off,
 SUM(total_off) OVER(ORDER BY `MONTH`) AS rolling_total
 FROM Rolling_Total;
 ```
-Key Insight: The cumulative sum highlights aggressive spikes in layoffs heading into late 2022 and early 2023.
+### 📸 Query Output Snapshot
+[Monthly Rolling Total of Layoffs Preview](screenshots/monthly_rolling_total_layoff.png)
+- **Key Insight:** The cumulative sum highlights aggressive spikes in layoffs heading into late 2022 and early 2023.
 
 ---
 
@@ -92,7 +94,9 @@ SELECT *
 FROM Company_Year_Rank
 WHERE Ranking <= 5;
 ```
-Key Insight: Allows a granular view of which specific companies dominated layoff sheets year-over-year.
+### 📸 Query Output Snapshot
+[Top 5 Layoff Companies Per Year Preview](screenshots/top_companies_by_year.png)
+- **Key Insight:** Allows a granular view of which specific companies dominated layoff sheets year-over-year.
 
 ---
 
