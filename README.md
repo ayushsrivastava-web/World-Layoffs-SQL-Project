@@ -40,11 +40,12 @@ world-layoffs-sql-project/
 - **Handling Null/Blank Values:** Converted blank spaces to NULL and used SQL Self-Joins to populate missing industry data.
 ### 📸 Data Cleaning Output Snapshot
 [Cleaned Data Preview](screenshots/cleaned_data_preview.png)
+
 ---
 
 ## 🔍 Part 2: Exploratory Data Analysis (EDA) (02_exploratory_data_analysis.sql)
-## 📊 Key Insights & Query Output Snapshots
-## 1. Top Companies by Total Layoffs
+### 📊 Key Insights & Query Output Snapshots
+### 1. Top Companies by Total Layoffs
 ```SQL
 SELECT company, SUM(total_laid_off) AS total_layoffs
 FROM layoff_staging2
@@ -58,7 +59,7 @@ LIMIT 5;
 
 ---
 
-## 2. Monthly Rolling Total of Layoffs:
+### 2. Monthly Rolling Total of Layoffs:
 ```SQL
 WITH Rolling_Total AS (
     SELECT SUBSTRING(`date`,1,7) AS `MONTH`, SUM(total_laid_off) AS total_off
@@ -77,7 +78,7 @@ FROM Rolling_Total;
 
 ---
 
-## 3. Top 5 Layoff Companies Per Year (Using DENSE_RANK):
+### 3. Top 5 Layoff Companies Per Year (Using DENSE_RANK):
 ```SQL
 WITH Company_Year (company, years, total_laid_off) AS (
     SELECT company, YEAR(`date`), SUM(total_laid_off)
@@ -101,9 +102,8 @@ WHERE Ranking <= 5;
 ---
 
 ## 🚀 How to Run This Project
-Clone or download this repository.
+-Clone or download this repository.
+-Execute 01_data_cleaning.sql in MySQL Workbench.
+-Execute 02_exploratory_data_analysis.sql for analytical insights.
 
-Execute 01_data_cleaning.sql in MySQL Workbench.
-
-Execute 02_exploratory_data_analysis.sql for analytical insights.
 ---
