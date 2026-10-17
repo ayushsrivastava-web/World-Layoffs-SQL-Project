@@ -39,7 +39,7 @@ world-layoffs-sql-project/
 - **Standardizing Data:**  Used TRIM() for white spaces, standardized Crypto variations, and converted text dates to SQL DATE type via STR_TO_DATE().
 - **Handling Null/Blank Values:** Converted blank spaces to NULL and used SQL Self-Joins to populate missing industry data.
 ### 📸 Data Cleaning Output Snapshot
-[Cleaned Data Preview](screenshots/cleaned_data_preview.png)
+![Cleaned Data Preview](./screenshots/cleaned_data_preview.png)
 
 ---
 
@@ -54,7 +54,7 @@ ORDER BY total_layoffs DESC
 LIMIT 5;
 ```
 ### 📸 Query Output Snapshot
-[Top Companies by Total Layoffs Preview](screenshots/top_companies_layoffs.png)
+![Top Companies by Total Layoffs Preview](./screenshots/top_companies_layoffs.png)
 - **Key Insight:** Tech giants like Amazon, Google, and Meta recorded the highest aggregate layoffs during the peak contraction phase.
 
 ---
@@ -73,7 +73,7 @@ SUM(total_off) OVER(ORDER BY `MONTH`) AS rolling_total
 FROM Rolling_Total;
 ```
 ### 📸 Query Output Snapshot
-[Monthly Rolling Total of Layoffs Preview](screenshots/monthly_rolling_total_layoff.png)
+![Monthly Rolling Total of Layoffs Preview](./screenshots/monthly_rolling_total_layoff.png)
 - **Key Insight:** The cumulative sum highlights aggressive spikes in layoffs heading into late 2022 and early 2023.
 
 ---
@@ -96,7 +96,7 @@ FROM Company_Year_Rank
 WHERE Ranking <= 5;
 ```
 ### 📸 Query Output Snapshot
-[Top 5 Layoff Companies Per Year Preview](screenshots/top_companies_by_year.png)
+![Top 5 Layoff Companies Per Year Preview](./screenshots/top_companies_by_year.png)
 - **Key Insight:** Allows a granular view of which specific companies dominated layoff sheets year-over-year.
 
 ---
